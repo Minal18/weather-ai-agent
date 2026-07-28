@@ -33,33 +33,6 @@ An agent is a loop, not a single call:
 | `get_current_weather` | Conditions right now | Temperature, feels like, conditions, humidity, wind |
 | `get_weather_forecast` | Next five days | One summary row per day: min and max temperature, rain probability, max wind, typical conditions |
 
-## Design notes
-
-### Tool output shape matters more than prompt wording
-
-The first working version passed the raw OpenWeather forecast response straight to the model: forty three hour slots, each with around twenty fields, roughly fifteen thousand characters of JSON per call.
-
-It also contained a bug. The `units=metric` parameter was missing from the forecast request, so temperatures came back in Kelvin.
-
-Asked whether to cycle in Liverpool tomorrow, the model read values around 294 and reported a high of 29C and a low of 22C. The real range was 17.5C to 25.1C.
-
-It did not error. It did not notice the values were implausible. It produced confident, well written, wrong advice.
-
-Two changes fixed it:
-
-* The tools now aggregate the forty slots into six daily summaries and return only the fields that answer a weather question.
-* Every tool response carries an explicit `"units": "celsius, m/s"` field, so a unit mismatch is visible to the model rather than silent.
-
-Same model, same system prompt, same question. The difference was entirely in what the tools handed back.
-
-### Errors are returned, not raised
-
-The API client functions return a readable string on failure rather than raising. An exception propagating out of a tool ends the agent run; a returned message lets the model explain the problem to the user. A search for a place that does not exist produces "No city found matching ..." rather than a stack trace.
-
-### Location is resolved once, up front
-
-City names are ambiguous. Rather than letting the model guess or asking mid conversation, the app resolves the place before the chat opens and shows the user what OpenWeather actually matched. The resolved location is written into the system prompt, so follow up questions like "and Thursday?" work without repeating the city.
-
 ## Project structure
 
 ```
@@ -106,7 +79,6 @@ uv run streamlit run app.py
 
 ## Known limitations
 
-* Places are resolved by name and country code, so cities sharing a name within one country (Springfield in the United States, for example) may not resolve to the intended one. Passing coordinates through to the API instead of a name string would fix this.
-* Forecast timestamps are UTC while the day boundaries used for aggregation are local, so daily summaries can be slightly off for locations far from UTC.
-* Rain probability for a day is the maximum across that day's three hour slots, which reads high when there is a single wet window. A time weighted figure would be more representative.
-* The hosted app sleeps after a period of inactivity and takes around thirty seconds to wake on the first visit.
+* The forecast times come back in UTC, but people think in their own local time. For places far from UTC, a daily summary can include a few hours from the day before or after.
+* The chance of rain for a day is taken from the wettest three hour slot in that day. This makes the number look high even when only one short period is wet.
+* The hosted app goes to sleep when nobody uses it. The first visit after that takes about thirty seconds to load.
