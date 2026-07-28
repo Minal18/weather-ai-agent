@@ -1,0 +1,25 @@
+# Secrets — never commit
+.env
+.env.*
+.streamlit/secrets.toml
+
+# Cached API responses (debug artifacts only)
+data/
+
+# Virtual environment
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Editors
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
