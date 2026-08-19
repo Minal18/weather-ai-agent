@@ -54,7 +54,7 @@ system_prompt = prompt+f"\n\nToday's date is {date.today().isoformat()}."
 # using llama-3 model
 llm_model = init_chat_model(
     model_provider="groq",
-    model="llama-3.3-70b-versatile",
+    model="openai/gpt-oss-120b",
     temperature=0,
 )
 
