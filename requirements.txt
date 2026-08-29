@@ -1,5 +1,5 @@
 langchain
 requests
-langchain-groq
+langchain-anthropic
 python-dotenv
 streamlit

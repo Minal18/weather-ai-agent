@@ -34,16 +34,16 @@ def getting_current_weather(city):
 
     except requests.RequestException as e:
 
-        return None, f"Could not reach the weather service: {e}"
-    
+        return f"Could not reach the weather service: {e}"
+
     if response.status_code == 404:
-        return None, f"No city found matching '{city}'."
-    
+        return f"No city found matching '{city}'."
+
     if response.status_code == 401:
-        return None, "Weather API rejected the key."
-    
+        return "Weather API rejected the key."
+
     if not response.ok:
-        return None, f"Weather service error {response.status_code}."
+        return f"Weather service error {response.status_code}."
 
     weather_info = response.json()
 

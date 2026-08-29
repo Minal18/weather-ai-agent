@@ -49,7 +49,7 @@ The separation is deliberate. `weather.py` is a faithful API client that returns
 
 ## Running locally
 
-Requires Python 3.11 or later, a free OpenWeather API key, and a free Groq API key.
+Requires Python 3.11 or later, a free OpenWeather API key, and an Anthropic API key.
 
 ```bash
 git clone https://github.com/YOUR_USERNAME/LangChain-Weather-Agent.git
@@ -61,7 +61,7 @@ Create a `.env` file in the project root:
 
 ```
 api_key=your_openweather_key
-GROQ_API_KEY=your_groq_key
+ANTHROPIC_API_KEY=your_anthropic_key
 ```
 
 Then:
@@ -73,7 +73,7 @@ uv run streamlit run app.py
 ## Built with
 
 * **LangChain** for the agent loop and tool binding
-* **Groq** running Llama 3.3 70B, chosen for a free tier with reliable native tool calling
+* **Anthropic Claude** (Claude Sonnet 5) for reliable native tool calling
 * **OpenWeather** current weather and five day forecast endpoints
 * **Streamlit** for the interface and hosting
 

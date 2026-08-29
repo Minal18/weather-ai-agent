@@ -1,6 +1,5 @@
 # importing required libraries
 from langchain.chat_models import init_chat_model
-from langchain_groq import ChatGroq
 from langchain.tools import tool
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.agents import create_agent
@@ -51,11 +50,10 @@ a tool call."""
 system_prompt = prompt+f"\n\nToday's date is {date.today().isoformat()}."
 
 #initialize model
-# using llama-3 model
+# using Claude Sonnet 5 via Anthropic
 llm_model = init_chat_model(
-    model_provider="groq",
-    model="openai/gpt-oss-120b",
-    temperature=0,
+    model_provider="anthropic",
+    model="claude-sonnet-5",
 )
 
 @tool
